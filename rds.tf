@@ -32,7 +32,7 @@ resource "aws_db_subnet_group" "ben-subnet-group" {
 */
 
 locals {
-  subnets_by_az = { for s in data.aws_subnet.subnet_details : s.availability_zone => s.id }
+  subnets_by_az  = { for s in data.aws_subnet.subnet_details : s.availability_zone => s.id }
   rds_subnet_ids = slice(values(local.subnets_by_az), 0, 2)
 }
 
@@ -94,7 +94,7 @@ module "rds" {
   db_subnet_group_name   = "ben-subnet-group"
 
   backup_retention_period = 0
-  skip_final_snapshot = true
+  skip_final_snapshot     = true
 
   tags = {
     Environment = "dev"
