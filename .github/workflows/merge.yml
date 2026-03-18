@@ -38,7 +38,7 @@ jobs:
           BUCKET_NAME: "benj58xu-terraform-backend"
           KEY_NAME: "terraform.tfstate"
           AWS_REGION: "us-east-2"
-        run: terraform init -backend-config="bucket=$BUCKET_NAME" -backend-config="key=$KEY_NAME" -backend-config="region=$AWS_REGION"
+        run: terraform init 
  
       # On merge to main apply changes
       - name: Terraform Apply
@@ -49,6 +49,6 @@ jobs:
           BUCKET_NAME: "benj58xu-terraform-backend"
           KEY_NAME: "terraform.tfstate"
           AWS_REGION: "us-east-2"
-        run: terraform apply -auto-approve -backend-config="bucket=$BUCKET_NAME" -backend-config="key=$KEY_NAME" -backend-config="region=$AWS_REGION"
+        run: terraform apply -auto-approve
       - name: List files
         run: ls ${{ github.workspace }}
