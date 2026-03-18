@@ -23,8 +23,6 @@ jobs:
       - run: echo "Triggered by a ${{ github.event_name }} event on branch ${{ github.ref }} by ${{ github.actor }}, testing target ${{ vars.TESTING_TARGET }}"
       - name: Check out repository code
         uses: actions/checkout@v5
-      - name: List files
-        run: ls ${{ github.workspace }}
       # Install the selected version of Terraform CLI 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4
@@ -42,7 +40,7 @@ jobs:
           AWS_REGION: "us-east-2"
         run: terraform init -backend-config="bucket=$BUCKET_NAME" -backend-config="key=$KEY_NAME" -backend-config="region=$AWS_REGION"
  
-    # On merge to main apply changes
+      # On merge to main apply changes
       - name: Terraform Apply
         id: apply
         env:
@@ -51,4 +49,6 @@ jobs:
           BUCKET_NAME: "benj58xu-terraform-backend"
           KEY_NAME: "terraform.tfstate"
           AWS_REGION: "us-east-2"
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -backend-config="bucket=$BUCKET_NAME" -backend-config="key=$KEY_NAME" -backend-config="region=$AWS_REGION"
+      - name: List files
+        run: ls ${{ github.workspace }}
