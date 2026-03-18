@@ -6,5 +6,11 @@ terraform {
     }
   }
 
+  backend "s3" {
+    bucket = "benj58xu-terraform-backend"
+    key    = "infrastructure/terraform.tfstate"
+    region = "us-east-2"
+  }
+
   required_version = ">= 1.2"
 }
