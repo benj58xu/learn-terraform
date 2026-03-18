@@ -1,0 +1,55 @@
+name: Push to feature branch
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!main'
+
+env:
+  TF_LOG: INFO
+  TF_INPUT: false
+
+jobs: 
+  check-code:
+    runs-on: ubuntu-latest
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    # Set the working directory to vnet for the config files
+    defaults:
+        run:
+          shell: bash
+          working-directory: .
+
+    steps:
+      - run: echo "Triggered by a ${{ github.event_name }} event on branch ${{ github.ref }} by ${{ github.actor }}, testing target ${{ vars.TESTING_TARGET }}"
+      - name: Check out repository code
+        uses: actions/checkout@v5
+      - name: List files
+        run: ls ${{ github.workspace }}
+      # Install the selected version of Terraform CLI 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.14.6"
+      - name: Terraform Version
+        run: terraform version
+      - name: Terraform Init
+        id: init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BUCKET_NAME: "benj58xu-terraform-backend"
+          KEY_NAME: "terraform.tfstate"
+          AWS_REGION: "us-east-2"
+        run: terraform init -backend-config="bucket=$BUCKET_NAME" -backend-config="key=$KEY_NAME" -backend-config="region=$AWS_REGION"
+      # Run a terraform fmt to check syntax
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+      # Run a terraform validate
+      - name: Terraform Validate
+        id: validate
+        # Run even if formatting fails
+        if: success() || failure()
+        run: terraform validate -no-color
+
