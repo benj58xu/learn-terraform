@@ -43,13 +43,13 @@ jobs:
           AWS_REGION: "us-east-2"
         run: terraform init -backend-config="bucket=$BUCKET_NAME" -backend-config="key=$KEY_NAME" -backend-config="region=$AWS_REGION"
       # Run a terraform fmt to check syntax
-      # - name: Terraform Format
-      #   id: fmt
-      #   run: terraform fmt -check
-      # # Run a terraform validate
-      # - name: Terraform Validate
-      #   id: validate
-      #   # Run even if formatting fails
-      #   if: success() || failure()
-      #   run: terraform validate -no-color
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+      # Run a terraform validate
+      - name: Terraform Validate
+        id: validate
+        # Run even if formatting fails
+        if: success() || failure()
+        run: terraform validate -no-color
 
