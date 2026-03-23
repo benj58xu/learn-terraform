@@ -25,7 +25,7 @@ resource "aws_iam_policy" "infrastructure_management" {
     Statement = [
       {
         Effect   = "Allow"
-        Action   = concat(var.rds_actions, var.s3_actions, ["ec2:DescribeVpcs", "ec2:DescribeSubnets", "ec2:DescribeSecurityGroups"])
+        Action   = concat(var.rds_actions, var.s3_actions, ["ec2:DescribeVpcs", "ec2:DescribeVpcAttribute", "ec2:DescribeSubnets", "ec2:DescribeSecurityGroups"])
         Resource = "*"
       }
     ]
