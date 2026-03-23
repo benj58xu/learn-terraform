@@ -60,6 +60,17 @@ variable "rds_actions" {
   ]
 }
 
+variable "s3_actions" {
+  description = "List of S3 permissions for the role/user"
+  type        = list(string)
+  default = [
+    "s3:ListBucket",
+    "s3:GetObject",
+    "s3:PutObject",
+    "s3:DeleteObject"
+  ]
+}
+
 variable "tags" {
   description = "Common tags applied to IAM resources"
   type        = map(string)
