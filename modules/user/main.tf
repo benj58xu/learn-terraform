@@ -1,6 +1,6 @@
 locals {
-  github_subject  = "repo:${var.github_org}/${var.github_repo}:ref:refs/heads/${var.github_branch}"
-  rds_policy_name = "${var.user_name}-rds-management-policy"
+  github_subject             = "repo:${var.github_org}/${var.github_repo}:ref:refs/heads/${var.github_branch}"
+  infrastructure_policy_name = "${var.user_name}-infrastructure-management-policy"
 }
 
 resource "aws_iam_user" "this" {
@@ -15,9 +15,9 @@ resource "aws_iam_access_key" "this" {
   user  = aws_iam_user.this[0].name
 }
 
-resource "aws_iam_policy" "rds_management" {
-  name        = local.rds_policy_name
-  description = "RDS management permissions for GitHub Actions and user"
+resource "aws_iam_policy" "infrastructure_management" {
+  name        = local.infrastructure_policy_name
+  description = "Infrastructure management permissions for GitHub Actions and user"
   path        = "/"
 
   policy = jsonencode({
@@ -25,17 +25,17 @@ resource "aws_iam_policy" "rds_management" {
     Statement = [
       {
         Effect   = "Allow"
-        Action   = concat(var.rds_actions, ["ec2:DescribeVpcs", "ec2:DescribeSubnets", "ec2:DescribeSecurityGroups"])
+        Action   = concat(var.rds_actions, var.s3_actions, ["ec2:DescribeVpcs", "ec2:DescribeSubnets", "ec2:DescribeSecurityGroups"])
         Resource = "*"
       }
     ]
   })
 }
 
-resource "aws_iam_user_policy_attachment" "rds_management_attach" {
+resource "aws_iam_user_policy_attachment" "infrastructure_management_attach" {
   count      = var.create_iam_user ? 1 : 0
   user       = aws_iam_user.this[0].name
-  policy_arn = aws_iam_policy.rds_management.arn
+  policy_arn = aws_iam_policy.infrastructure_management.arn
 }
 
 resource "aws_iam_openid_connect_provider" "github_actions" {
@@ -64,6 +64,8 @@ resource "aws_iam_role" "github_actions_role" {
         Condition = {
           StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+          }
+          StringLike = {
             "token.actions.githubusercontent.com:sub" = local.github_subject
           }
         }
@@ -74,8 +76,8 @@ resource "aws_iam_role" "github_actions_role" {
   tags = merge(var.tags, { "managed-by" = "terraform" })
 }
 
-resource "aws_iam_role_policy_attachment" "github_actions_rds_attach" {
+resource "aws_iam_role_policy_attachment" "github_actions_infrastructure_attach" {
   count      = var.create_github_actions_role ? 1 : 0
   role       = aws_iam_role.github_actions_role[0].name
-  policy_arn = aws_iam_policy.rds_management.arn
+  policy_arn = aws_iam_policy.infrastructure_management.arn
 }
