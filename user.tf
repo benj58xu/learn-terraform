@@ -12,7 +12,7 @@ module "github_actions_user" {
 
   github_org    = "benj58xu"
   github_repo   = "learn-terraform"
-  github_branch = "main"
+  github_branch = "*"
 
   tags = {
     Environment = "dev"
