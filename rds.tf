@@ -104,20 +104,3 @@ module "rds" {
   depends_on = [aws_db_subnet_group.ben-subnet-group]
 }
 
-module "github_actions_user" {
-  source = "./modules/user"
-
-  user_name                  = "github-actions-user"
-  create_iam_user            = true
-  create_access_key          = false
-  create_github_actions_role = true
-
-  github_org    = "your-github-org"
-  github_repo   = "your-repo"
-  github_branch = "main"
-
-  tags = {
-    Environment = "dev"
-    Project     = "myproject"
-  }
-}
