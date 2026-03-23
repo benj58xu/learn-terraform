@@ -31,6 +31,8 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::821080507765:role/github-actions-user-github-actions-role
           aws-region: us-east-2
+      - name: List environment variables
+        run: env
       - name: Check out repository code
         uses: actions/checkout@v5
       - name: List files
