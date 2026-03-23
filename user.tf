@@ -1,8 +1,5 @@
 provider "aws" {
   region = "us-east-2"
-  assume_role {
-    role_arn = "arn:aws:iam::821080507765:role/github-actions-user-github-actions-role"
-  }
 }
 
 module "github_actions_user" {

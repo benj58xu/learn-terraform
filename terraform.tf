@@ -11,9 +11,6 @@ terraform {
     key          = "infrastructure/terraform.tfstate"
     region       = "us-east-2"
     use_lockfile = true
-    assume_role {
-      role_arn = "arn:aws:iam::821080507765:role/github-actions-user-github-actions-role"
-    }
   }
 
   required_version = ">= 1.2"
