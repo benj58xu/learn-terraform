@@ -56,7 +56,8 @@ variable "rds_actions" {
     "rds:ModifyDBInstance",
     "rds:DescribeDBSubnetGroups",
     "rds:DescribeDBSecurityGroups",
-    "rds:DescribeDBParameterGroups"
+    "rds:DescribeDBParameterGroups",
+    "rds:ListTagsForResource"
   ]
 }
 
