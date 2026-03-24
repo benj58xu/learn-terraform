@@ -82,7 +82,7 @@ module "rds" {
 
   identifier        = "my-database"
   engine            = "mariadb"
-  engine_version    = "8.0"
+  engine_version    = "11.4"
   instance_class    = "db.t3.micro"
   allocated_storage = 20
 
