@@ -31,7 +31,13 @@ resource "aws_iam_policy" "infrastructure_management" {
             "ec2:DescribeSubnets",
             "ec2:DescribeSecurityGroups",
             "ec2:CreateSecurityGroup",
-            "ec2:CreateTags" ])
+            "ec2:CreateTags",
+            "ec2:RevokeSecurityGroupEgress",
+            "ec2:RevokeSecurityGroupIngress",
+            "ec2:AuthorizeSecurityGroupEgress",
+            "ec2:AuthorizeSecurityGroupIngress",
+            "ec2:DescribeNetworkInterfaces",
+            "ec2:DeleteSecurityGroup" ])
         Resource = "*"
       }
     ]
