@@ -24,20 +24,20 @@ resource "aws_iam_policy" "infrastructure_management" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
-        Action   = concat(var.rds_actions, var.s3_actions, [
-            "ec2:DescribeVpcs",
-            "ec2:DescribeVpcAttribute",
-            "ec2:DescribeSubnets",
-            "ec2:DescribeSecurityGroups",
-            "ec2:CreateSecurityGroup",
-            "ec2:CreateTags",
-            "ec2:RevokeSecurityGroupEgress",
-            "ec2:RevokeSecurityGroupIngress",
-            "ec2:AuthorizeSecurityGroupEgress",
-            "ec2:AuthorizeSecurityGroupIngress",
-            "ec2:DescribeNetworkInterfaces",
-            "ec2:DeleteSecurityGroup" ])
+        Effect = "Allow"
+        Action = concat(var.rds_actions, var.s3_actions, [
+          "ec2:DescribeVpcs",
+          "ec2:DescribeVpcAttribute",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeSecurityGroups",
+          "ec2:CreateSecurityGroup",
+          "ec2:CreateTags",
+          "ec2:RevokeSecurityGroupEgress",
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:AuthorizeSecurityGroupEgress",
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:DescribeNetworkInterfaces",
+        "ec2:DeleteSecurityGroup"])
         Resource = "*"
       }
     ]
