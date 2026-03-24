@@ -70,15 +70,12 @@ resource "aws_security_group" "mysql" {
 }
 
 /*
-Q1: how to find existing subnet subnet_ids
-Q2: how to find existing security group ids
-
 if skip_final_snapshot is false, cannot destroy the database instance
 unless final_snapshot_identifier is provided when creating the database
 */
 
 module "rds" {
-  source = "./modules/rds"
+  source = "../../../modules/rds"
 
   identifier        = "my-database"
   engine            = "mariadb"
