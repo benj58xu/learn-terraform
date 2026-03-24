@@ -57,7 +57,8 @@ variable "rds_actions" {
     "rds:DescribeDBSubnetGroups",
     "rds:DescribeDBSecurityGroups",
     "rds:DescribeDBParameterGroups",
-    "rds:ListTagsForResource"
+    "rds:ListTagsForResource",
+    "rds:CreateDBSubnetGroup"
   ]
 }
 
