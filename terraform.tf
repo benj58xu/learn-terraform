@@ -7,12 +7,12 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "benj58xu-terraform-backend"
+    bucket       = "benj58xu-terraform-backend"
     use_lockfile = true
     /* Need to change this for the current stack */
-    key          = "applications/app1/rds/terraform.tfstate"
+    key = "applications/app1/rds/terraform.tfstate"
     /* Need to change this for the current stack */
-    region       = "us-east-2"
+    region = "us-east-2"
   }
 
   required_version = ">= 1.2"
