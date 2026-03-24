@@ -74,6 +74,14 @@ variable "s3_actions" {
   ]
 }
 
+variable "dynamodb_actions" {
+  description = "List of DynamoDB permissions for the role/user"
+  type        = list(string)
+  default = [
+    "dynamodb:*"
+  ]
+}
+
 variable "tags" {
   description = "Common tags applied to IAM resources"
   type        = map(string)
