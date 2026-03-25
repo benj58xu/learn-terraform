@@ -26,6 +26,8 @@ jobs:
 
     steps:
       - run: echo "Triggered by a ${{ github.event_name }} event on branch ${{ github.ref }} by ${{ github.actor }}, testing target ${{ vars.TESTING_TARGET }}"
+      - name: Check out repository code
+        uses: actions/checkout@v5
       - run: grep AWS_ACCOUNT terraform.tf >> $GITHUB_ENV
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -34,8 +36,6 @@ jobs:
           aws-region: us-east-2
       - name: List environment variables
         run: env
-      - name: Check out repository code
-        uses: actions/checkout@v5
       - name: List files
         run: ls ${{ github.workspace }}
       # Install the selected version of Terraform CLI 
