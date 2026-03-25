@@ -48,5 +48,5 @@ jobs:
         working-directory: ${{ env.CURRENT_STACK }}
       - name: Terraform Apply
         id: apply
-        run: terraform apply -auto-approve -var="aws_region=$AWS_REGION"
+        run: terraform apply -auto-approve
         working-directory: ${{ env.CURRENT_STACK }}

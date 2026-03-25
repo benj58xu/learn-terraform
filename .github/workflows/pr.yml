@@ -55,7 +55,7 @@ jobs:
           # AWS_REGION: "us-east-2"
           BUCKET_NAME: "benj58xu-terraform-backend"
           KEY_NAME: "terraform.tfstate"
-        run: terraform plan -no-color -var="aws_region=$AWS_REGION"
+        run: terraform plan -no-color
         working-directory: ${{ env.CURRENT_STACK }}
       # Add a comment to pull requests with plan results
       - name: Add Plan Comment
