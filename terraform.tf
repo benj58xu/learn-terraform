@@ -9,23 +9,13 @@ terraform {
   backend "s3" {
     bucket       = "benj58xu-terraform-backend"
     use_lockfile = true
-    region       = "us-east-2" /* always use us-east-2 for tfstate */
+    region       = "us-east-2" /* always use this region for tfstate files */
     /* 1. Need to change this for the current stack */
-    key = "applications/app1/dynamodb/terraform.tfstate"
+    key = "will-be-overridden-by-command-line/terraform.tfstate"
   }
 
   required_version = ">= 1.2"
 }
-
-module "current_stack" {
-  /* 2. Need to change this for the current stack */
-  source = "./applications/app1/dynamodb"
-}
-
-/*
-3. Need to change the account ID
-AWS_ACCOUNT=821080507765
-*/
 
 /*
 You may need to run "terraform init -reconfigure" to forget .terraform/terraform.tfstate
