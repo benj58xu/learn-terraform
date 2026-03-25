@@ -26,10 +26,11 @@ jobs:
 
     steps:
       - run: echo "Triggered by a ${{ github.event_name }} event on branch ${{ github.ref }} by ${{ github.actor }}, testing target ${{ vars.TESTING_TARGET }}"
+      - run: grep AWS_ACCOUNT terraform.tf >> $GITHUB_ENV
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::821080507765:role/github-actions-user-github-actions-role
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/github-actions-user-github-actions-role
           aws-region: us-east-2
       - name: List environment variables
         run: env
