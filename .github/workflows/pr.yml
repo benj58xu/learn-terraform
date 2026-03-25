@@ -27,7 +27,8 @@ jobs:
       - run: echo "Triggered by a ${{ github.event_name }} event on branch ${{ github.ref }} by ${{ github.actor }}, testing target ${{ vars.TESTING_TARGET }}"
       - name: Check out repository code
         uses: actions/checkout@v5
-      - run: grep AWS_ACCOUNT terraform.tf >> $GITHUB_ENV
+      - run: cat github.env >> $GITHUB_ENV
+      - run: sed "s/var.aws_region/\"$AWS_REGION\"/" scripts/terraform.tf > $CURRENT_STACK/terraform.tf
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -40,13 +41,11 @@ jobs:
           terraform_version: "1.14.7"
       - name: Terraform Init
         id: init
-        env:
+        # env:
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # AWS_REGION: "us-east-2"
-          BUCKET_NAME: "benj58xu-terraform-backend"
-          KEY_NAME: "terraform.tfstate"
-        run: terraform init -backend-config="bucket=$BUCKET_NAME" -backend-config="key=$KEY_NAME" -backend-config="region=$AWS_REGION"
+        run: terraform init -backend-config="key=$AWS_ACCOUNT/$CURRENT_STACK/$AWS_REGION/terraform.tfstate"
+        working-directory: ${{ env.CURRENT_STACK }}
       # Run Terraform Plan to check for any changes that would be applied
       - name: Terraform Plan
         id: plan
@@ -57,6 +56,7 @@ jobs:
           BUCKET_NAME: "benj58xu-terraform-backend"
           KEY_NAME: "terraform.tfstate"
         run: terraform plan -no-color
+        working-directory: ${{ env.CURRENT_STACK }}
       # Add a comment to pull requests with plan results
       - name: Add Plan Comment
         id: comment
