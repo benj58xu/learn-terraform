@@ -25,20 +25,19 @@ jobs:
 
     steps:
       - run: echo "Triggered by a ${{ github.event_name }} event on branch ${{ github.ref }} by ${{ github.actor }}, testing target ${{ vars.TESTING_TARGET }}"
+      - name: Check out repository code
+        uses: actions/checkout@v5
+      - run: grep AWS_ACCOUNT terraform.tf >> $GITHUB_ENV
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::821080507765:role/github-actions-user-github-actions-role
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/github-actions-user-github-actions-role
           aws-region: us-east-2
-      - name: Check out repository code
-        uses: actions/checkout@v5
       # Install the selected version of Terraform CLI 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.14.7"
-      - name: Terraform Version
-        run: terraform version
       - name: Terraform Init
         id: init
         env:
@@ -48,8 +47,6 @@ jobs:
           BUCKET_NAME: "benj58xu-terraform-backend"
           KEY_NAME: "terraform.tfstate"
         run: terraform init 
- 
-      # On merge to main apply changes
       - name: Terraform Apply
         id: apply
         env:
@@ -59,5 +56,3 @@ jobs:
           BUCKET_NAME: "benj58xu-terraform-backend"
           KEY_NAME: "terraform.tfstate"
         run: terraform apply -auto-approve
-      - name: List files
-        run: ls ${{ github.workspace }}
