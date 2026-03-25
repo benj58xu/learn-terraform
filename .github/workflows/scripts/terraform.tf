@@ -9,8 +9,7 @@ terraform {
   backend "s3" {
     bucket       = "benj58xu-terraform-backend"
     use_lockfile = true
-    region       = var.aws_region
-    /* 1. Need to change this for the current stack */
+    region       = var.aws_region     /* this is replaced by sed */
     key = "will-be-overridden-by-command-line/terraform.tfstate"
   }
 
@@ -19,10 +18,5 @@ terraform {
 
 
 provider "aws" {
-  region = var.aws_region
+  region = var.aws_region   /* this is replaced by sed */
 }
-
-
-/*
-You may need to run "terraform init -reconfigure" to forget .terraform/terraform.tfstate
-*/

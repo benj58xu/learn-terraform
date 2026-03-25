@@ -1,6 +1,3 @@
-provider "aws" {
-  region = "us-east-2"
-}
 
 module "github_actions_user" {
   source = "./modules/user"
