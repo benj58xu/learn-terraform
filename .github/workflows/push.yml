@@ -47,10 +47,9 @@ jobs:
         run: terraform version
       - name: Terraform Init
         id: init
-        env:
+        # env:
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          NOT_NEEDED: "$AWS_ACCOUNT/$CURRENT_STACK/$AWS_REGION/terraform.tfstate"
         run: terraform init -backend-config="key=$AWS_ACCOUNT/$CURRENT_STACK/$AWS_REGION/terraform.tfstate" -var="aws_region=$AWS_REGION"
         working-directory: ${{ env.CURRENT_STACK }}
       # Run a terraform fmt to check syntax
@@ -62,10 +61,9 @@ jobs:
         id: validate
         # Run even if formatting fails
         if: success() || failure()
-        env:
+        # env:
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          NOT_NEEDED: "$AWS_ACCOUNT/$CURRENT_STACK/$AWS_REGION/terraform.tfstate"
-        run: terraform validate -no-color -backend-config="key=$AWS_ACCOUNT/$CURRENT_STACK/$AWS_REGION/terraform.tfstate" -var="aws_region=$AWS_REGION"
+        run: terraform validate -no-color -var="aws_region=$AWS_REGION"
         working-directory: ${{ env.CURRENT_STACK }}
 
