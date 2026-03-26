@@ -1,6 +1,6 @@
 **/.terraform
 **/.terraform.lock.hcl
-**/destroy.tf
+**/generated_terraform.tf
 terraform.tfstate
 terraform.tfstate.backup
 *~

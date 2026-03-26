@@ -4,4 +4,4 @@ source github.env
 sed "s/var.aws_region/\"$AWS_REGION\"/" scripts/terraform.tf > applications/$STACK_SET/generated_terraform.tf
 cd applications/$STACK_SET
 terraform init -backend-config="key=$STACK_SET/$AWS_ACCOUNT/$AWS_REGION/terraform.tfstate" -reconfigure
-terraform destroy
+terraform apply -auto-approve
