@@ -17,7 +17,6 @@ jobs:
   merge-pull-request:
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    # Set the working directory to vnet for the config files
     defaults:
         run:
           shell: bash
@@ -34,19 +33,20 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/github-actions-user-github-actions-role
           aws-region: us-east-2
-      # Install the selected version of Terraform CLI 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.14.7"
       - name: Terraform Init
         id: init
-        # env:
-          # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: terraform init -backend-config="key=$STACK_SET/$AWS_ACCOUNT/$AWS_REGION/terraform.tfstate"
         working-directory: applications/${{ env.STACK_SET }}
       - name: Terraform Apply
         id: apply
-        run: terraform apply -auto-approve
+        run: |
+          if [ "$DESTROY" == "true" ]; then
+            terraform destroy -auto-approve
+          else
+            terraform apply -auto-approve
+          fi
         working-directory: applications/${{ env.STACK_SET }}
