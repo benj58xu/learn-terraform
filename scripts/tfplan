@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source github.env
-sed "s/var.aws_region/\"$AWS_REGION\"/" scripts/terraform.tf > $CURRENT_STACK/destroy.tf
-cd $CURRENT_STACK
-terraform init -backend-config="key=$AWS_ACCOUNT/$CURRENT_STACK/$AWS_REGION/terraform.tfstate" -reconfigure
+sed "s/var.aws_region/\"$AWS_REGION\"/" scripts/terraform.tf > applications/$STACK_SET/terraform.tf
+cd applications/$STACK_SET
+terraform init -backend-config="key=$STACK_SET/$AWS_ACCOUNT/$AWS_REGION/terraform.tfstate" -reconfigure
 terraform plan
