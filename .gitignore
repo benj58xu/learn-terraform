@@ -1,8 +1,8 @@
 **/.terraform
 **/.terraform.lock.hcl
+**/destroy.tf
 terraform.tfstate
 terraform.tfstate.backup
 *~
 **/*~
 .git/
-

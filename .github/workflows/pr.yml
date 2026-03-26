@@ -28,7 +28,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v5
       - run: cat github.env >> $GITHUB_ENV
-      - run: sed "s/var.aws_region/\"$AWS_REGION\"/" scripts/terraform.tf > $CURRENT_STACK/terraform.tf
+      - run: sed "s/var.aws_region/\"$AWS_REGION\"/" scripts/terraform.tf > applications/$STACK_SET/terraform.tf
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -44,8 +44,8 @@ jobs:
         # env:
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform init -backend-config="key=$AWS_ACCOUNT/$CURRENT_STACK/$AWS_REGION/terraform.tfstate"
-        working-directory: ${{ env.CURRENT_STACK }}
+        run: terraform init -backend-config="key=$STACK_SET/$AWS_ACCOUNT/$AWS_REGION/terraform.tfstate"
+        working-directory: applications/${{ env.STACK_SET }}
       # Run Terraform Plan to check for any changes that would be applied
       - name: Terraform Plan
         id: plan
@@ -56,7 +56,7 @@ jobs:
           BUCKET_NAME: "benj58xu-terraform-backend"
           KEY_NAME: "terraform.tfstate"
         run: terraform plan -no-color
-        working-directory: ${{ env.CURRENT_STACK }}
+        working-directory: applications/${{ env.STACK_SET }}
       # Add a comment to pull requests with plan results
       - name: Add Plan Comment
         id: comment
