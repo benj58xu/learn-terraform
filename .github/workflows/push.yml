@@ -28,14 +28,14 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v5
       - run: cat github.env >> $GITHUB_ENV
+      - name: List environment variables
+        run: env
       - run: sed "s/var.aws_region/\"$AWS_REGION\"/" scripts/terraform.tf > applications/$STACK_SET/terraform.tf
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/github-actions-user-github-actions-role
           aws-region: us-east-2
-      - name: List environment variables
-        run: env
       - name: List files
         run: ls ${{ github.workspace }}
       # Install the selected version of Terraform CLI 
