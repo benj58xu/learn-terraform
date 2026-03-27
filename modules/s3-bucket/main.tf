@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "this" {
-  bucket_prefix = var.bucket_name
+  bucket = var.bucket_name
   bucket_namespace = "account-regional"
   acl    = var.acl
 
