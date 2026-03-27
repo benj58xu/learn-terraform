@@ -64,3 +64,8 @@ After updating `github.env` appropriately, run the script `scripts/tfdestory`.
 
 You can also trigger through GitHub Actions by adding `DESTROY=true` to `github.env`.
 GitHub Actions will run `terraform plan -destory` and `terraform destory`, accordingly.
+
+### Potential Improvements
+
+* put AWS_ACCOUNT and AWS_REGION in applications/_app_/_stack-set-name_/github.env, so that we do not need to modify them in github.env every time we switch stack set.
+
