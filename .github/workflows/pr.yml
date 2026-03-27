@@ -28,7 +28,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v5
       - run: cat github.env >> $GITHUB_ENV
-      - run: sed "s/var.aws_region/\"$AWS_REGION\"/" scripts/terraform.tf > applications/$STACK_SET/terraform.tf
+      - run: sed -e "s/var.aws_region/\"$AWS_REGION\"/" -e "s/var.bucket/\"terraform-$AWS_ACCOUNT-$AWS_REGION-an\"/"scripts/terraform.tf > applications/$STACK_SET/terraform.tf
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
