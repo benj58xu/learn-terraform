@@ -1,4 +1,4 @@
-name: Pull Request Main
+name: Run Terraform Plan on Pull Request
 
 on:
   pull_request:

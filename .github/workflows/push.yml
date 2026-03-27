@@ -1,4 +1,4 @@
-name: Push to feature branch
+name: Run Terraform Validate on Push to Develop Branch
 
 on:
   push:

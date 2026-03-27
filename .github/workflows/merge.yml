@@ -1,4 +1,4 @@
-name: Merge to Main branch
+name: Run Terraform Apply
 
 on:
   push:
@@ -19,7 +19,7 @@ env:
   TF_LOG: INFO
   TF_INPUT: false
 
-jobs: 
+jobs:
   merge-pull-request:
     name: Run Terraform Apply
     runs-on: ubuntu-latest
