@@ -15,6 +15,7 @@ env:
 
 jobs: 
   push-to-feature-branch:
+    name: Test GitHub Actions with Terraform Validate
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     # Set the working directory to vnet for the config files

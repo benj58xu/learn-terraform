@@ -21,6 +21,7 @@ env:
 
 jobs: 
   merge-pull-request:
+    name: Run Terraform Apply
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -50,7 +51,8 @@ jobs:
       - name: Terraform Apply
         id: apply
         run: |
-          if [ "$DESTROY" == "true" ]; then
+          # Prefer workflow input DESTROY on manual dispatch, fallback to env DESTROY.
+          if [ "${{ github.event.inputs.DESTROY }}" == "true" ] || [ "$DESTROY" == "true" ]; then
             terraform destroy -auto-approve
           else
             terraform apply -auto-approve
