@@ -4,12 +4,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
-    inputs:
-      DESTROY:
-        description: 'Whether to run terraform destroy (true/false)'
-        required: false
-        default: 'false'
 
 permissions:
   id-token: write # Required for OIDC
