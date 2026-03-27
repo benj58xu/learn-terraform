@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "this" {
-  bucket = var.bucket_name
+  bucket = "${var.bucket_name}-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.name}-an" 
   bucket_namespace = "account-regional"
   acl    = var.acl
 
@@ -12,6 +12,10 @@ resource "aws_s3_bucket" "this" {
 
   force_destroy = var.force_destroy
 }
+
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
 
 resource "aws_s3_bucket_versioning" "this" {
   bucket = aws_s3_bucket.this.id
