@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "this" {
-  bucket = var.bucket_name
+  bucket_prefix = var.bucket_name
+  bucket_namespace = "account-regional"
   acl    = var.acl
 
   tags = merge(
@@ -23,7 +24,6 @@ resource "aws_s3_bucket_versioning" "this" {
 resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   count  = var.encrypt ? 1 : 0
   bucket = aws_s3_bucket.this.id
-  bucket_namespace = "account-regional"
 
   rule {
     apply_server_side_encryption_by_default {
