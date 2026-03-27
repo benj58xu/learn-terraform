@@ -20,7 +20,7 @@ env:
   TF_INPUT: false
 
 jobs: 
-  run-terraform-apply:
+  merge-pull-request:
     name: Run Terraform Apply
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
