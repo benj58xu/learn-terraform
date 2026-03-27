@@ -14,7 +14,8 @@ env:
   TF_INPUT: false
 
 jobs: 
-  push-to-feature-branch:
+  test-github-actions:
+    name: Test GitHub Actions
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     # Set the working directory to vnet for the config files
