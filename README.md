@@ -6,7 +6,7 @@ This repository stores Terraform files for all AWS resources managed by the infr
 
 A _stack set_ is a directory containing Terraform files — essentially a Terraform root module. Stack sets are typically organized by application team and stored under the `applications` directory. For example, if an application team named `helios` needs a stack set for a MariaDB database, the stack set would be named `helios/mariadb`, with Terraform files stored in `applications/helios/mariadb`.
 
-A _stack_ is a specific deployment of a stack set to a particular AWS account and region. Each stack has a Terraform state file stored in S3 with the path: _stack-set_/_aws-account_/_aws-region_/terraform.tfstate. Continuing with the MariaDB example, if you deploy the stack set to AWS account 821080507765 in the `us-east-2` region, the state file would be at `helios/mariadb/821080507765/us-east-2/terraform.tfstate`.
+A _stack_ is a specific deployment of a stack set to a particular AWS account and region. Each stack has a Terraform state file stored in a S3 bucket named with `terraform-`_aws-account_`-`_aws-region_`-an` with the path: _stack-set_`/terraform.tfstate`. Continuing with the MariaDB example, if you deploy the stack set to AWS account 821080507765 in the `us-east-2` region, the state file would be at `helios/mariadb/821080507765/us-east-2/terraform.tfstate`.
 
 This repository is integrated with GitHub Actions. When you create a pull request, GitHub Actions automatically runs `terraform plan` and posts the results as a comment. After the pull request is reviewed and approved, GitHub Actions runs `terraform apply` to deploy the infrastructure.
 
