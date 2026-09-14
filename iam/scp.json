@@ -1,0 +1,73 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EnforceTagsAcrossAllCategories",
+      "Effect": "Deny",
+      "Action": [
+        "ec2:CreateVpc",
+        "ec2:CreateSubnet",
+        "rds:CreateDBInstance",
+        "rds:CreateDBCluster",
+        "s3:CreateBucket",
+        "dynamodb:CreateTable",
+        "ecs:CreateService",
+        "eks:CreateCluster",
+        "lambda:CreateFunction",
+        "elasticloadbalancing:CreateLoadBalancer",
+        "secretsmanager:CreateSecret",
+        "kms:CreateKey",
+        "ec2:CreateSecurityGroup"
+      ],
+      "Resource": [
+        "arn:aws:ec2:*:*:instance/*",
+        "arn:aws:ec2:*:*:volume/*",
+        "arn:aws:ec2:*:*:vpc/*",
+        "arn:aws:ec2:*:*:subnet/*",
+        "arn:aws:rds:*:*:db/*",
+        "arn:aws:rds:*:*:cluster/*",
+        "arn:aws:s3:::*",
+        "arn:aws:dynamodb:*:*:table/*",
+        "arn:aws:ecs:*:*:service/*",
+        "arn:aws:eks:*:*:cluster/*",
+        "arn:aws:lambda:*:*:function:*",
+        "arn:aws:elasticloadbalancing:*:*:loadbalancer/*",
+        "arn:aws:secretsmanager:*:*:secret:*",
+        "arn:aws:kms:*:*:key/*",
+        "arn:aws:ec2:*:*:security-group/*"
+      ],
+      "Condition": {
+        "Null": {
+          "aws:RequestTag/soa_application_name": "true",
+          "aws:RequestTag/soa_application_team": "true",
+          "aws:RequestTag/soa_environment": "true",
+          "aws:RequestTag/soa_data_classification": "true",
+          "aws:RequestTag/soa_business_criticality": "true",
+          "aws:RequestTag/soa_owner_email": "true"
+        }
+      }
+    },
+    {
+      "Sid": "EnforceMandatoryTagsWithExemptions",
+      "Effect": "Deny",
+      "Action": "ec2:RunInstances",
+      "Resource": "arn:aws:ec2:*:*:instance/*",
+      "Condition": {
+        "Null": {
+          "aws:RequestTag/soa_application_name": "true",
+          "aws:RequestTag/soa_application_team": "true",
+          "aws:RequestTag/soa_environment": "true",
+          "aws:RequestTag/soa_data_classification": "true",
+          "aws:RequestTag/soa_business_criticality": "true",
+          "aws:RequestTag/soa_owner_email": "true"
+        },
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::145023118334:role/soa-java-run-lambda-role*",
+            "arn:aws:iam::058264427801:role/soa-java-run-lambda-role*"
+          ]
+        }
+      }
+    }
+  ]
+}
