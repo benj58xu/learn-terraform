@@ -1,7 +1,32 @@
 #!/bin/bash
 
-source github.env
-sed -e "s/var.aws_region/\"$AWS_REGION\"/" -e "s/var.bucket/\"terraform-$AWS_ACCOUNT-$AWS_REGION-an\"/" scripts/terraform.tf > applications/$STACK_SET/generated_terraform.tf
-cd applications/$STACK_SET
+set -euo pipefail
+
+if [ "$#" -lt 1 ]; then
+  echo "Usage: $0 <stack-set>" >&2
+  echo "Example: $0 ymca/frontend" >&2
+  exit 1
+fi
+
+STACK_SET="$1"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+STACK_DIR="$ROOT_DIR/applications/$STACK_SET"
+ENV_FILE="$STACK_DIR/github.env"
+
+if [ ! -d "$STACK_DIR" ] || [ ! -f "$ENV_FILE" ]; then
+  echo "Stack set '$STACK_SET' was not found, or $ENV_FILE is missing." >&2
+  exit 1
+fi
+
+set -a
+source "$ENV_FILE"
+set +a
+
+if [ "$STACK_SET" = "ymca/lambda" ]; then
+  export TF_VAR_lambda_zip_path="${LAMBDA_ZIP_PATH:-lambda_package.zip}"
+fi
+
+sed -e "s/var.aws_region/\"$AWS_REGION\"/" -e "s/var.bucket/\"terraform-$AWS_ACCOUNT-$AWS_REGION-an\"/" "$ROOT_DIR/scripts/terraform.tf" > "$STACK_DIR/generated_terraform.tf"
+cd "$STACK_DIR"
 terraform init -backend-config="key=$STACK_SET/terraform.tfstate" -reconfigure
 terraform plan

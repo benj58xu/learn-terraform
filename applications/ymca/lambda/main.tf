@@ -1,16 +1,7 @@
-terraform {
-  required_providers {
-    archive = {
-      source  = "hashicorp/archive"
-      version = "~> 2.7"
-    }
-  }
-}
-
-data "archive_file" "lambda" {
-  type        = "zip"
-  source_file = "${path.module}/lambda_function.py"
-  output_path = "${path.module}/.terraform/lambda_function.zip"
+variable "lambda_zip_path" {
+  description = "Path to the prebuilt Lambda ZIP, relative to this stack directory."
+  type        = string
+  default     = "lambda_package.zip"
 }
 
 data "aws_caller_identity" "current" {}
@@ -87,14 +78,14 @@ resource "aws_lambda_function" "ymca" {
   function_name    = local.function_name
   role             = aws_iam_role.lambda.arn
   runtime          = "python3.12"
-  handler          = "lambda_function.handler"
-  filename         = data.archive_file.lambda.output_path
-  source_code_hash = data.archive_file.lambda.output_base64sha256
+  handler          = "handler.lambda_handler"
+  filename         = "${path.module}/${var.lambda_zip_path}"
+  source_code_hash = filebase64sha256("${path.module}/${var.lambda_zip_path}")
 
   environment {
     variables = {
-      USERS_TABLE           = "ymca_users"
-      VOLUNTEER_HOURS_TABLE = "ymca_volunteer_hours"
+      USERS_TABLE = "ymca_users"
+      HOURS_TABLE = "ymca_volunteer_hours"
     }
   }
 
