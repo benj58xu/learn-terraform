@@ -91,3 +91,49 @@ resource "aws_lambda_function" "ymca" {
 
   tags = local.tags
 }
+
+resource "aws_apigatewayv2_api" "ymca" {
+  name          = "ymca-api"
+  protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_headers = ["content-type"]
+    allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allow_origins = ["*"]
+  }
+
+  tags = local.tags
+}
+
+resource "aws_apigatewayv2_integration" "ymca" {
+  api_id                 = aws_apigatewayv2_api.ymca.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.ymca.invoke_arn
+  integration_method     = "POST"
+  payload_format_version = "1.0"
+}
+
+resource "aws_apigatewayv2_route" "default" {
+  api_id    = aws_apigatewayv2_api.ymca.id
+  route_key = "$default"
+  target    = "integrations/${aws_apigatewayv2_integration.ymca.id}"
+}
+
+resource "aws_apigatewayv2_stage" "default" {
+  api_id      = aws_apigatewayv2_api.ymca.id
+  name        = "$default"
+  auto_deploy = true
+}
+
+resource "aws_lambda_permission" "api_gateway" {
+  statement_id  = "AllowExecutionFromHttpApi"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ymca.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.ymca.execution_arn}/*"
+}
+
+output "api_url" {
+  description = "Base URL for the YMCA HTTP API."
+  value       = aws_apigatewayv2_api.ymca.api_endpoint
+}
